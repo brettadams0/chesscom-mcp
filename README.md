@@ -1,5 +1,9 @@
 # chesscom-mcp
 
+[![CI](https://github.com/brettadams0/chesscom-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/brettadams0/chesscom-mcp/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen.svg)](package.json)
+
 An MCP server over the [Chess.com public data API](https://www.chess.com/news/view/published-data-api).
 Read-only, and the upstream API needs no authentication — there is no token to
 manage and nothing to expire, which makes this the simplest of the set.
