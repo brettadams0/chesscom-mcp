@@ -1,8 +1,8 @@
 {
-  "name": "@brettadams0/chesscom-mcp",
+  "name": "chesscom-mcp",
   "version": "1.0.0",
   "type": "module",
-  "description": "MCP server for the Chess.com public data API — profiles, ratings, games and leaderboards",
+  "description": "MCP server for the Chess.com public data API \u2014 profiles, ratings, games and leaderboards",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
@@ -41,7 +41,5 @@
   "bugs": {
     "url": "https://github.com/brettadams0/chesscom-mcp/issues"
   },
-  "publishConfig": {
-    "access": "public"
-  }
+  "private": true
 }

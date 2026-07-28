@@ -10,19 +10,6 @@ manage and nothing to expire, which makes this the simplest of the set.
 
 Runs over stdio and is registered in `~/.claude.json` as `chesscom`.
 
-## Install
-
-```bash
-claude mcp add chesscom -- npx -y @brettadams0/chesscom-mcp
-```
-
-No credentials needed — that is the whole setup.
-
-Published as [`@brettadams0/chesscom-mcp`](https://www.npmjs.com/package/@brettadams0/chesscom-mcp).
-The scope is there because the unscoped name was already taken on npm by an
-unrelated package. Cloning this repo and pointing `claude mcp add` at
-`src/index.js` works identically.
-
 ## Tools
 
 | Tool | Purpose |
