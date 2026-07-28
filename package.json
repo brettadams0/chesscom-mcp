@@ -1,9 +1,8 @@
 {
-  "name": "chesscom-mcp",
+  "name": "@brettadams0/chesscom-mcp",
   "version": "1.0.0",
-  "private": true,
   "type": "module",
-  "description": "Personal MCP server for Chess.com's public read-only API. No auth required.",
+  "description": "MCP server for the Chess.com public data API — profiles, ratings, games and leaderboards",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
@@ -12,5 +11,37 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "zod": "^3.23.8"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "chess",
+    "chess-com"
+  ],
+  "license": "MIT",
+  "author": "Brett Adams",
+  "bin": {
+    "chesscom-mcp": "src/index.js"
+  },
+  "files": [
+    "src",
+    "scripts",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brettadams0/chesscom-mcp.git"
+  },
+  "homepage": "https://github.com/brettadams0/chesscom-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/brettadams0/chesscom-mcp/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
