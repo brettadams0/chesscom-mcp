@@ -1,0 +1,15 @@
+{
+  "name": "chesscom-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal MCP server for Chess.com's public read-only API. No auth required.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.23.8"
+  }
+}
