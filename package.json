@@ -6,7 +6,8 @@
   "description": "Personal MCP server for Chess.com's public read-only API. No auth required.",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "node --test test/tools.test.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",

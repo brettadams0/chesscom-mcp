@@ -41,6 +41,15 @@ Registered for Claude Code with:
 claude mcp add chesscom -- node <path>/chesscom-mcp/src/index.js
 ```
 
+## Tests
+
+```bash
+npm test
+```
+
+Registration plus the fetch wrapper's URL, headers and error handling, using a
+stubbed `fetch`. No network calls, so it is safe in CI.
+
 ## Notes
 
 - The upstream API is rate-limited but generous, and serves cached responses.
