@@ -17,6 +17,7 @@ export function registerChessTools(server) {
     'chess_get_profile',
     {
       title: 'Get Chess.com player profile',
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: 'Public profile info (name, title, country, followers, join date) for a Chess.com username.',
       inputSchema: { username: USERNAME },
     },
@@ -27,6 +28,7 @@ export function registerChessTools(server) {
     'chess_get_stats',
     {
       title: 'Get Chess.com player stats',
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: 'Rating and win/loss/draw stats per game format (bullet, blitz, rapid, daily, puzzles) for a username.',
       inputSchema: { username: USERNAME },
     },
@@ -37,6 +39,7 @@ export function registerChessTools(server) {
     'chess_get_current_games',
     {
       title: 'Get in-progress daily games',
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: "Daily (correspondence) games a player currently has in progress.",
       inputSchema: {
         username: USERNAME,
@@ -54,6 +57,7 @@ export function registerChessTools(server) {
     'chess_get_game_archives',
     {
       title: 'List monthly game archive URLs',
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: 'List of monthly archive URLs available for a player, going back to when they started playing.',
       inputSchema: { username: USERNAME },
     },
@@ -64,6 +68,7 @@ export function registerChessTools(server) {
     'chess_get_games_by_month',
     {
       title: 'Get games played in a given month',
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: 'All games (rated + casual, all formats) a player completed in a specific year/month.',
       inputSchema: {
         username: USERNAME,
@@ -86,6 +91,7 @@ export function registerChessTools(server) {
     'chess_get_clubs',
     {
       title: "Get a player's clubs",
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: 'Clubs a given username belongs to.',
       inputSchema: { username: USERNAME },
     },
@@ -96,6 +102,7 @@ export function registerChessTools(server) {
     'chess_get_club',
     {
       title: 'Get club details',
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: 'Details for a club, identified by its URL id (the slug in chess.com/club/<url-id>).',
       inputSchema: {
         urlId: z
@@ -110,6 +117,7 @@ export function registerChessTools(server) {
     'chess_get_titled_players',
     {
       title: 'List titled players',
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: 'Usernames of all players holding a given title (e.g. GM, IM, FM, WGM, NM).',
       inputSchema: {
         title: z
@@ -124,6 +132,7 @@ export function registerChessTools(server) {
     'chess_get_leaderboards',
     {
       title: 'Get global leaderboards',
+      annotations: { readOnlyHint: true, openWorldHint: true },
       description: 'Top players across daily/live formats and tactics/puzzle-rush leaderboards.',
       inputSchema: {},
     },
