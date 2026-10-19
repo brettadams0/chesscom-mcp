@@ -1,0 +1,245 @@
+{
+  "capabilities": [
+    "tools"
+  ],
+  "prompts": [],
+  "resources": [],
+  "server": {
+    "name": "chesscom",
+    "version": "1.1.0"
+  },
+  "snapshotVersion": 1,
+  "tools": [
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "Details for a club, identified by its URL id (the slug in chess.com/club/<url-id>).",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false,
+        "properties": {
+          "urlId": {
+            "description": "Club URL slug — the part after chess.com/club/, e.g. \"team-canada\". Lowercase and hyphenated, not the club's display name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "urlId"
+        ],
+        "type": "object"
+      },
+      "name": "chess_get_club"
+    },
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "Clubs a given username belongs to.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "description": "Chess.com username (the handle in chess.com/member/<username>), case-insensitive. Not the display name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "type": "object"
+      },
+      "name": "chess_get_clubs"
+    },
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "Daily (correspondence) games a player currently has in progress.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false,
+        "properties": {
+          "onlyMyTurn": {
+            "description": "When true, return only the games where it is this player's turn to move. Defaults to false (all in-progress games).",
+            "type": "boolean"
+          },
+          "username": {
+            "description": "Chess.com username (the handle in chess.com/member/<username>), case-insensitive. Not the display name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "type": "object"
+      },
+      "name": "chess_get_current_games"
+    },
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "List of monthly archive URLs available for a player, going back to when they started playing.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "description": "Chess.com username (the handle in chess.com/member/<username>), case-insensitive. Not the display name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "type": "object"
+      },
+      "name": "chess_get_game_archives"
+    },
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "All games (rated + casual, all formats) a player completed in a specific year/month: players, ratings, results, time control and a link to each. Move records (PGN) are omitted unless includePgn is true.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false,
+        "properties": {
+          "includePgn": {
+            "description": "Return each game in full, including its PGN. A busy month is megabytes of it, so only set this when the moves themselves are needed. Defaults to false.",
+            "type": "boolean"
+          },
+          "month": {
+            "description": "Month as a number from 1 to 12 (1 = January). Send a plain integer, not a zero-padded string.",
+            "maximum": 12,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "timeClass": {
+            "description": "Only return games of this time class. Omit for all.",
+            "enum": [
+              "bullet",
+              "blitz",
+              "rapid",
+              "daily"
+            ],
+            "type": "string"
+          },
+          "username": {
+            "description": "Chess.com username (the handle in chess.com/member/<username>), case-insensitive. Not the display name.",
+            "type": "string"
+          },
+          "year": {
+            "description": "Four-digit year, e.g. 2026.",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "username",
+          "year",
+          "month"
+        ],
+        "type": "object"
+      },
+      "name": "chess_get_games_by_month"
+    },
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "Top players across daily/live formats and tactics/puzzle-rush leaderboards.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {},
+        "type": "object"
+      },
+      "name": "chess_get_leaderboards"
+    },
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "Public profile info (name, title, country, followers, join date) for a Chess.com username.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "description": "Chess.com username (the handle in chess.com/member/<username>), case-insensitive. Not the display name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "type": "object"
+      },
+      "name": "chess_get_profile"
+    },
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "Rating and win/loss/draw stats per game format (bullet, blitz, rapid, daily, puzzles) for a username.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "description": "Chess.com username (the handle in chess.com/member/<username>), case-insensitive. Not the display name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "type": "object"
+      },
+      "name": "chess_get_stats"
+    },
+    {
+      "annotations": {
+        "openWorldHint": true,
+        "readOnlyHint": true
+      },
+      "description": "Usernames of all players holding a given title (e.g. GM, IM, FM, WGM, NM).",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "description": "Title code, uppercase. W-prefixed codes are the women's titles (WGM = Woman Grandmaster).",
+            "enum": [
+              "GM",
+              "WGM",
+              "IM",
+              "WIM",
+              "FM",
+              "WFM",
+              "NM",
+              "WNM",
+              "CM",
+              "WCM"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "name": "chess_get_titled_players"
+    }
+  ]
+}

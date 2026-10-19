@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { chessGet } from './client.js';
+import { chessGet, clubId, username } from './client.js';
+import { json } from './shared.js';
 
 // Chess.com identifies players by username everywhere, and the failure mode when
 // a model guesses wrong is a 404 rather than an obvious error — so say plainly
@@ -8,8 +9,18 @@ const USERNAME = z
   .string()
   .describe('Chess.com username (the handle in chess.com/member/<username>), case-insensitive. Not the display name.');
 
-function json(data) {
-  return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+/**
+ * A month of games for an active player runs to megabytes, nearly all of it
+ * the move record: `pgn`, plus `tcn` (the same moves, encoded) and the final
+ * position. Clients cap tool output far below that, so the model would get a
+ * truncated fragment. Questions like "how did I do this month?" need the
+ * players, ratings, results and links, so the move record is opt-in, and the
+ * UUIDs and API self-links that duplicate the usernames are dropped.
+ */
+export function summariseGame(game) {
+  const { pgn: _pgn, tcn: _tcn, fen: _fen, initial_setup: _setup, uuid: _uuid, white, black, ...rest } = game;
+  const player = ({ '@id': _id, uuid: _playerUuid, ...p } = {}) => p;
+  return { ...rest, white: player(white), black: player(black) };
 }
 
 export function registerChessTools(server) {
@@ -21,7 +32,7 @@ export function registerChessTools(server) {
       description: 'Public profile info (name, title, country, followers, join date) for a Chess.com username.',
       inputSchema: { username: USERNAME },
     },
-    async ({ username }) => json(await chessGet(`/player/${encodeURIComponent(username)}`))
+    async (args) => json(await chessGet(`/player/${username(args.username)}`))
   );
 
   server.registerTool(
@@ -32,7 +43,7 @@ export function registerChessTools(server) {
       description: 'Rating and win/loss/draw stats per game format (bullet, blitz, rapid, daily, puzzles) for a username.',
       inputSchema: { username: USERNAME },
     },
-    async ({ username }) => json(await chessGet(`/player/${encodeURIComponent(username)}/stats`))
+    async (args) => json(await chessGet(`/player/${username(args.username)}/stats`))
   );
 
   server.registerTool(
@@ -49,8 +60,8 @@ export function registerChessTools(server) {
           .describe('When true, return only the games where it is this player\'s turn to move. Defaults to false (all in-progress games).'),
       },
     },
-    async ({ username, onlyMyTurn }) =>
-      json(await chessGet(`/player/${encodeURIComponent(username)}/games${onlyMyTurn ? '/to-move' : ''}`))
+    async ({ onlyMyTurn, ...args }) =>
+      json(await chessGet(`/player/${username(args.username)}/games${onlyMyTurn ? '/to-move' : ''}`))
   );
 
   server.registerTool(
@@ -61,7 +72,7 @@ export function registerChessTools(server) {
       description: 'List of monthly archive URLs available for a player, going back to when they started playing.',
       inputSchema: { username: USERNAME },
     },
-    async ({ username }) => json(await chessGet(`/player/${encodeURIComponent(username)}/games/archives`))
+    async (args) => json(await chessGet(`/player/${username(args.username)}/games/archives`))
   );
 
   server.registerTool(
@@ -69,7 +80,8 @@ export function registerChessTools(server) {
     {
       title: 'Get games played in a given month',
       annotations: { readOnlyHint: true, openWorldHint: true },
-      description: 'All games (rated + casual, all formats) a player completed in a specific year/month.',
+      description:
+        'All games (rated + casual, all formats) a player completed in a specific year/month: players, ratings, results, time control and a link to each. Move records (PGN) are omitted unless includePgn is true.',
       inputSchema: {
         username: USERNAME,
         year: z.number().int().describe('Four-digit year, e.g. 2026.'),
@@ -81,10 +93,21 @@ export function registerChessTools(server) {
           .min(1)
           .max(12)
           .describe('Month as a number from 1 to 12 (1 = January). Send a plain integer, not a zero-padded string.'),
+        timeClass: z
+          .enum(['bullet', 'blitz', 'rapid', 'daily'])
+          .optional()
+          .describe('Only return games of this time class. Omit for all.'),
+        includePgn: z
+          .boolean()
+          .optional()
+          .describe('Return each game in full, including its PGN. A busy month is megabytes of it, so only set this when the moves themselves are needed. Defaults to false.'),
       },
     },
-    async ({ username, year, month }) =>
-      json(await chessGet(`/player/${encodeURIComponent(username)}/games/${year}/${String(month).padStart(2, '0')}`))
+    async ({ year, month, timeClass, includePgn, ...args }) => {
+      const archive = await chessGet(`/player/${username(args.username)}/games/${year}/${String(month).padStart(2, '0')}`);
+      const games = (archive.games ?? []).filter((g) => !timeClass || g.time_class === timeClass);
+      return json({ games: includePgn ? games : games.map(summariseGame) });
+    }
   );
 
   server.registerTool(
@@ -95,7 +118,7 @@ export function registerChessTools(server) {
       description: 'Clubs a given username belongs to.',
       inputSchema: { username: USERNAME },
     },
-    async ({ username }) => json(await chessGet(`/player/${encodeURIComponent(username)}/clubs`))
+    async (args) => json(await chessGet(`/player/${username(args.username)}/clubs`))
   );
 
   server.registerTool(
@@ -110,7 +133,7 @@ export function registerChessTools(server) {
           .describe('Club URL slug — the part after chess.com/club/, e.g. "team-canada". Lowercase and hyphenated, not the club\'s display name.'),
       },
     },
-    async ({ urlId }) => json(await chessGet(`/club/${encodeURIComponent(urlId)}`))
+    async ({ urlId }) => json(await chessGet(`/club/${clubId(urlId)}`))
   );
 
   server.registerTool(
